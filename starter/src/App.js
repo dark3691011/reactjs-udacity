@@ -1,5 +1,7 @@
 import "./App.css";
 import { useState } from "react";
+import BookShelf from "./components/book-shelf";
+import MainPage from "./components/main-page";
 
 function App() {
   const [showSearchPage, setShowSearchpage] = useState(false);
@@ -28,11 +30,13 @@ function App() {
         </div>
       ) : (
         <div className="list-books">
+          <MainPage />
           <div className="list-books-title">
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
             <div>
+              <BookShelf title="Test1" />
               <div className="bookshelf">
                 <h2 className="bookshelf-title">Currently Reading</h2>
                 <div className="bookshelf-books">
