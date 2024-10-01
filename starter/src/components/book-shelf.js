@@ -5,9 +5,10 @@ import PropTypes from "prop-types";
 BookShelf.prototype = {
   title: PropTypes.string,
   books: PropTypes.array,
+  onUpdateEvent: PropTypes.func,
 };
 
-function BookShelf({ title, books }) {
+function BookShelf({ title, books, onUpdateEvent }) {
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
@@ -16,11 +17,7 @@ function BookShelf({ title, books }) {
           {books?.map((e) => {
             return (
               <li key={e.title}>
-                <BookItem
-                  url={e.imageLinks.thumbnail}
-                  name={e.title}
-                  authors={e.authors}
-                />
+                <BookItem book={e} onUpdateEvent={onUpdateEvent} />
               </li>
             );
           })}

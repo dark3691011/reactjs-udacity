@@ -11,6 +11,10 @@ function MainPage() {
   const [readBooks, setReadBooks] = useState([]);
 
   useEffect(async () => {
+    await fetchBook();
+  }, []);
+
+  const fetchBook = async () => {
     const resBooks = await getAll();
     setCurrentlyReadingBooks(
       resBooks?.filter((e) => e.shelf === shelfType.currentlyReading)
@@ -19,7 +23,7 @@ function MainPage() {
       resBooks?.filter((e) => e.shelf === shelfType.wantToRead)
     );
     setReadBooks(resBooks?.filter((e) => e.shelf === shelfType.read));
-  }, []);
+  };
 
   return (
     <div className="list-books">
@@ -32,10 +36,23 @@ function MainPage() {
             <BookShelf
               title="Currently Reading"
               books={currentlyReadingBooks}
+              onUpdateEvent={fetchBook}
             />
           }
-          {<BookShelf title="Want to Read" books={wantToReadBooks} />}
-          {<BookShelf title="Read" books={readBooks} />}
+          {
+            <BookShelf
+              title="Want to Read"
+              books={wantToReadBooks}
+              onUpdateEvent={fetchBook}
+            />
+          }
+          {
+            <BookShelf
+              title="Read"
+              books={readBooks}
+              onUpdateEvent={fetchBook}
+            />
+          }
         </div>
       </div>
       <div className="open-search">
