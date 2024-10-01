@@ -27,7 +27,10 @@ function BookItem({ book, onUpdateEvent }) {
           }}
         ></div>
         <div className="book-shelf-changer">
-          <select onChange={changeShelf} defaultValue={book.shelf}>
+          <select
+            onChange={changeShelf}
+            defaultValue={book.shelf || shelfType.none}
+          >
             <option value="none" disabled>
               Move to...
             </option>
