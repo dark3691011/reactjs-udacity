@@ -9,9 +9,32 @@ BookItem.propTypes = {
 };
 
 function BookItem({ book, onUpdateEvent }) {
+  const options = [
+    {
+      value: shelfType.currentlyReading,
+      label: "Currently Reading",
+      key: shelfType.currentlyReading,
+    },
+    {
+      value: shelfType.wantToRead,
+      label: "Want to Read",
+      key: shelfType.wantToRead,
+    },
+    {
+      value: shelfType.read,
+      label: "Read",
+      key: shelfType.read,
+    },
+    {
+      value: shelfType.none,
+      label: "None",
+      key: shelfType.none,
+    },
+  ];
+
   const changeShelf = (event) => {
-    update(book, event.target.value).then((book) => {
-      onUpdateEvent();
+    update(book, event.target.value).then((res) => {
+      onUpdateEvent(book.id, event.target.value);
     });
   };
 
@@ -23,7 +46,7 @@ function BookItem({ book, onUpdateEvent }) {
           style={{
             width: 128,
             height: 193,
-            backgroundImage: `url("${book.imageLinks.thumbnail}")`,
+            backgroundImage: `url("${book?.imageLinks?.thumbnail}")`,
           }}
         ></div>
         <div className="book-shelf-changer">
@@ -34,12 +57,14 @@ function BookItem({ book, onUpdateEvent }) {
             <option value="none" disabled>
               Move to...
             </option>
-            <option value={shelfType.currentlyReading}>
-              Currently Reading
-            </option>
-            <option value={shelfType.wantToRead}>Want to Read</option>
-            <option value={shelfType.read}>Read</option>
-            <option value={shelfType.none}>None</option>
+
+            {options.map((e) => {
+              return (
+                <option key={e.key} value={e.value}>
+                  {e.label}
+                </option>
+              );
+            })}
           </select>
         </div>
       </div>

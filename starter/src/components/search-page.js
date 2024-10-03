@@ -1,18 +1,29 @@
 import "../App.css";
 import { useState } from "react";
 import BookItem from "./book-item";
-import { search } from "../BooksAPI";
+import { search, getAll } from "../BooksAPI";
 import { Link } from "react-router-dom";
+import { shelfType } from "../constants/index";
 
 function SearchPage() {
   const [books, setBooks] = useState([]);
 
   const searchBook = async (keyword) => {
     if (keyword) {
-      const books = await search(keyword, 20);
-      if (books.error) {
+      const booksSearch = await search(keyword, 20);
+
+      if (booksSearch.error) {
         setBooks([]);
       } else {
+        const booksOnList = await getAll();
+        const books = [...booksSearch];
+        books.forEach((book) => {
+          const findBook = booksOnList?.find((e) => e.id === book.id);
+          book.shelf = shelfType.none;
+          if (findBook) {
+            book.shelf = findBook.shelf;
+          }
+        });
         setBooks(books);
       }
     }

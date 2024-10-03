@@ -7,23 +7,24 @@ import { Link } from "react-router-dom";
 import { shelfType } from "../constants/index";
 
 function MainPage() {
-  const [currentlyReadingBooks, setCurrentlyReadingBooks] = useState([]);
-  const [wantToReadBooks, setwantToReadBooks] = useState([]);
-  const [readBooks, setReadBooks] = useState([]);
+  const [books, setBooks] = useState([]);
 
-  useEffect(async () => {
-    await fetchBook();
+  useEffect(() => {
+    fetchBook();
   }, []);
 
   const fetchBook = async () => {
     const resBooks = await getAll();
-    setCurrentlyReadingBooks(
-      resBooks?.filter((e) => e.shelf === shelfType.currentlyReading)
-    );
-    setwantToReadBooks(
-      resBooks?.filter((e) => e.shelf === shelfType.wantToRead)
-    );
-    setReadBooks(resBooks?.filter((e) => e.shelf === shelfType.read));
+    setBooks(resBooks);
+  };
+
+  const updateBook = (id, toShelf) => {
+    const book = books.find((e) => e.id === id);
+
+    if (book) {
+      book.shelf = toShelf;
+    }
+    setBooks([...(books || [])]);
   };
 
   return (
@@ -37,22 +38,24 @@ function MainPage() {
             {
               <BookShelf
                 title="Currently Reading"
-                books={currentlyReadingBooks}
-                onUpdateEvent={fetchBook}
+                books={books?.filter(
+                  (e) => e.shelf === shelfType.currentlyReading
+                )}
+                onUpdateEvent={updateBook}
               />
             }
             {
               <BookShelf
                 title="Want to Read"
-                books={wantToReadBooks}
-                onUpdateEvent={fetchBook}
+                books={books?.filter((e) => e.shelf === shelfType.wantToRead)}
+                onUpdateEvent={updateBook}
               />
             }
             {
               <BookShelf
                 title="Read"
-                books={readBooks}
-                onUpdateEvent={fetchBook}
+                books={books?.filter((e) => e.shelf === shelfType.read)}
+                onUpdateEvent={updateBook}
               />
             }
           </div>
