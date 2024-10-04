@@ -26,6 +26,8 @@ function SearchPage() {
         });
         setBooks(books);
       }
+    } else {
+      setBooks([])
     }
   };
 
